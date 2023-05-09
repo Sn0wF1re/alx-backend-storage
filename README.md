@@ -1,1 +1,1 @@
-This repo handles storage
+This repository handles storage
