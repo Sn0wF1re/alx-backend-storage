@@ -54,8 +54,8 @@ def replay(method: Callable) -> None:
     key = method.__qualname__
     inputs = key + ':inputs'
     outputs = key + ':outputs'
-    r = method.__self__.redis
-    calls = r.get(key).decode('utf-8')
+    r = redis.Redis()
+    calls = int(r.get(key).decode('utf-8'))
     print(f"{key} was called {calls} times")
     inpList = r.lrange(inputs, 0, -1)
     outList = r.lrange(outputs, 0, -1)
