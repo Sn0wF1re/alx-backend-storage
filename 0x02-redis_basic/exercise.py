@@ -54,16 +54,21 @@ def replay(method: Callable) -> None:
     key = method.__qualname__
     inputs = key + ':inputs'
     outputs = key + ':outputs'
-    r = redis.Redis()
+    r = method.__self__.redis
     calls = r.get(key).decode('utf-8')
     print(f"{key} was called {calls} times")
     inpList = r.lrange(inputs, 0, -1)
     outList = r.lrange(outputs, 0, -1)
     for k, v in zip(inpList, outList):
-        print(f"{key}(*({k.decode('utf-8')})) -> {v.decode('utf-8')}")
+        field = k.decode('utf-8')
+        value = v.decode('utf-8')
+        print(f"{key}(*({field})) -> {value}")
 
 
 class Cache:
+    """
+    Define the Cache class
+    """
     def __init__(self):
         """
         initializes the class
