@@ -55,24 +55,13 @@ def replay(method: Callable) -> None:
     inputs = key + ':inputs'
     outputs = key + ':outputs'
     r = redis.Redis()
-    calls = r.get(key)
-    try:
-        calls = int(calls.decode('utf-8'))
-    except Exception:
-        calls = 0
+    calls = int(r.get(key).decode('utf-8'))
     print(f"{key} was called {calls} times")
     inpList = r.lrange(inputs, 0, -1)
     outList = r.lrange(outputs, 0, -1)
     for k, v in zip(inpList, outList):
-        try:
-            field = k.decode('utf-8')
-        except Exception:
-            field = ''
-
-        try:
-            value = v.decode('utf-8')
-        except Exception:
-            value = ''
+        field = k.decode('utf-8')
+        value = v.decode('utf-8')
         print(f"{key}(*({field})) -> {value}")
 
 
